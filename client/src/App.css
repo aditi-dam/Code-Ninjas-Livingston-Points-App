@@ -1,0 +1,22 @@
+.Header, .App {
+  text-align: center;
+  /* background-color: aliceblue; */
+  /* margin: 20px; */
+}
+
+button {
+  margin-bottom: 20px;
+}
+
+table, th, td {
+  margin: 0 auto;
+  /* width: 50%; */
+  border: 1px solid;
+  border-collapse: collapse;  /* Only one border instead of two */
+  /* border-bottom: 1px solid #ddd; */
+}
+
+th, td {
+  text-align: left;
+  padding: 7px;
+}

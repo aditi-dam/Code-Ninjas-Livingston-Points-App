@@ -1,0 +1,52 @@
+Notes about the severe initial debugging in the beginning stages of this project
+(These were probably a result of trying to set up the client-server with the Google API logic)
+All of these are done in PowerShell.
+
+To deal with the removal of NodeJS polyfills (which is apparently the cause of all these issues),
+I made changes according to the user Vitto's answer on
+https://stackoverflow.com/questions/64557638/how-to-polyfill-node-core-modules-in-webpack-5.
+
+For installing modules, make sure to use `npm i --save-dev` and then the module's name.
+
+Conclusion:
+The errors have been solved generally by a combination of
+- The NodeJS polyfills fix (probably; see above)
+- Installation using --save-dev in a parent (root?) folder (also see above)
+- Going to package.json, and adding something like:
+    "browser": {
+        "crypto": false,
+        "child_process": false,
+        "fs": false,
+        "path": false,
+        "os": false,
+        "net": false,
+        "stream": false,
+        "tls": false
+    },
+where the name of the module causing a problem is set to false.
+
+--------------------------------------------------------------------------------------------------------
+
+- General recurring `require` issues:
+    - https://stackoverflow.com/questions/73317870/cant-resolve-querystring-in-react
+        - (Putting everything in webpack.config.js doesn't work, unfortunately)
+    - Note: for stream, sometimes the import is `npm install stream-browserify` while 
+    other times it might be `npm i stream`
+
+- `fs` issues specifically: 
+    - Make adjustments to package.json (see Sarat Chandra's answer on 
+    https://stackoverflow.com/questions/46775168/cant-resolve-fs-using-webpack-and-react)
+    - As long as fs is installed in a parent package, the package.json adjustments will work.
+        - Installing fs to devDependencies:
+            - Make sure to type `npm i --save-dev fs` in PowerShell 
+
+- Search within a folder: 
+    - `dir (name of folder)`, like `cookie-signature` or `.\@types\`
+
+- Check what modules are installed
+    - `npm list` in any directory to see which modules are installed (and which aren't but should be)
+    - If there are warnings about unmet dependencies, run `npm install`
+    - If searching for a specific module, type `npm list` and then the module's name
+
+
+
