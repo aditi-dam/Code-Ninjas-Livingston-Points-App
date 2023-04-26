@@ -1,6 +1,9 @@
 import { React, useState, useEffect } from "react";
 import { addDataToSheets, getSheetsData, updateSheetsData } from "./sheetsFunctions";
 
+import { Button, Card, Form, Input, InputNumber, Dropdown, Empty, Table } from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
+
 import './App.css';
 
 /**
@@ -80,158 +83,305 @@ function App() {
     };
 
 
-    const AddUserForm = () => {
-        const [firstName, setFirstName] = useState("");
-        const [lastName, setLastName] = useState("");
+    const AddStudentForm = () => {
+        const onFinish = values => {
+            const newUserData = [[values.lastName, values.firstName, 0]]
 
-        const handleSubmit = event => {
-            event.preventDefault();
-
-            if (firstName != "" && lastName != "") {
-                const newUserData = [[lastName, firstName, 0]]
-
-                addDataToSheets(newUserData, SHEET_ID, "'Livingston Student List'!A3");
-
-                window.location.reload(true);
-            }
-            else {
-                alert("Please fill out all fields.");
-            }
-        }
-
-        return (
-            <div>
-                <h4>Add Student</h4>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Last Name:&nbsp;&nbsp;</label>
-                        <input 
-                            type="text"
-                            name="lastName"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                        <br></br>
-                        <label>First Name:&nbsp;&nbsp;</label>
-                        <input 
-                            type="text"
-                            name="firstName"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                        <br></br>
-                        <button type="submit">Submit</button>
-                        <button onClick={() => {setShowAddForm(false)}}>Cancel</button>
-                    </div>
-                </form>
-            </div>
-        )
-    }
-
-
-    const UpdateUserForm = () => {
-        const [fullName, setFullName] = useState("");
-        const [newPoints, setNewPoints] = useState("");
-
-        const handleSubmit = event => {
-            event.preventDefault();
-
-            if (fullName !== "" && newPoints !== "") {
-                console.log("Updating " + fullName + "'s points to " + newPoints)
-
-                for (let i = 0; i < sheetsData.length; i++) {
-                    const lastName = sheetsData[i][0];
-                    const firstName = sheetsData[i][1];
-
-                    if (fullName.trim() === (firstName + " " + lastName)) {
-                        updateSheetsData(SHEET_ID, LIVINGSTON_SHEET_ID, newPoints, i+2, 2);
-                        break;
-                    }
-                }
-            }
-            else {
-                alert("Please fill out all fields.");
-            }
-
+            addDataToSheets(newUserData, SHEET_ID, "'Livingston Student List'!A3");
             window.location.reload(true);
         }
 
+        const onReset = () => {
+            setShowAddForm(false);
+        }
+
         return (
-            <div className="update-user-form-container">
-                <h4>Update User</h4>
-                <form onSubmit={handleSubmit}>
-                    <div className="internal-update-form-container">
-                        <label>Student's Name:&nbsp;&nbsp;</label>
-                        <input 
-                            type="text"
-                            name="fullName"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                        />
-                        <br></br>
-                        <label>New Point Total:&nbsp;&nbsp;</label>
-                        <input 
-                            type="float"
-                            name="newPoints"
-                            value={newPoints}
-                            onChange={e => setNewPoints(e.target.value)}
-                        />
-                        <br></br>
-                        <button className="update-user-submit-button" type="submit">Submit</button>
-                        <button
-                            className="cancel-update-user-button"
-                            onClick={() => {setShowUpdatePointsForm(false)}}>
-                                Cancel
-                        </button>
-                    </div>
-                </form>
-                <br></br>
+            <>
+            <Card
+                style={{
+                    backgroundColor: "#9DC08B",
+                    display: "inline-block",
+                    paddingLeft: "300px",
+                    paddingRight: "300px"
+                }}
+            >
+                <Form
+                    name="addStudentForm"
+                    labelCol={{ span: 80 }}
+                    wrapperCol={{ span: 10 }}
+                    style={{ 
+                        maxWidth: 500,
+                        textAlign: "left",
+                        display: "inline-block",
+                        fontFamily: "'Oxygen', sans-serif"
+                    }}
+
+                    onFinish={onFinish}
+                    autoComplete="off"
+                >
+                    <h3 style={{ textAlign: "center" }}>Add A Student</h3>
+                    <Form.Item
+                        wrapperCol={{ span: 12 }}
+                        label={ <p style={{ fontFamily: "'Oxygen', sans-serif", fontSize: "15px" }}>
+                            First Name
+                        </p> }
+                        name="firstName"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please enter the student's first name."
+                            }
+                        ]}
+                    >
+                        <Input style={{ fontFamily: "'Oxygen', sans-serif" }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{ span: 12 }}
+                        label={ <p style={{ fontFamily: "'Oxygen', sans-serif", fontSize: "15px" }}>
+                            Last Name
+                        </p> }
+                        name="lastName"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please enter the student's last name."
+                            }
+                        ]}
+                    >
+                        <Input style={{ fontFamily: "'Oxygen', sans-serif" }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{
+                            offset: 5,
+                            span: 16
+                        }}    
+                    >
+                        <Button type="button" htmlType="submit" className="submitButton"
+                        style={{ fontFamily: "'Oxygen', sans-serif" }}>
+                            Submit
+                        </Button>
+                        <Button type="button" htmlType="button" onClick={onReset} className="cancelButton"
+                        style={{ fontFamily: "'Oxygen', sans-serif" }}>
+                            Cancel
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+            <br></br>
+            <br></br>
+            </>
+        )
+    }
+
+
+    const UpdateStudentForm = () => {
+        const [studentName, setStudentName] = useState("");
+        const [studentIndex, setStudentIndex] = useState(0);
+        
+        const items = [];
+        for (let i = 0; i < sheetsData.length; i++) {
+            items.push({
+                label: sheetsData[i][1] + " " + sheetsData[i][0],
+                key: i,
+            })
+        }
+        console.log(items);
+
+        const handleMenuClick = e => {
+            const nameChoice = sheetsData[e.key][1] + " " + sheetsData[e.key][0];
+            console.log(nameChoice);
+            console.log(e.key);
+
+            setStudentName(nameChoice);
+            setStudentIndex(e.key);
+        }
+
+        const menuProps = {
+            items,
+            onClick: handleMenuClick,
+        };
+        
+        const onFinish = values => {
+            if (studentName === "") {
+                alert("Please choose a student from the dropdown menu.")
+            }
+            else {
+                console.log("Updating " + studentName + "'s points to " + values.newPoints);
+
+                updateSheetsData(
+                    SHEET_ID, LIVINGSTON_SHEET_ID, values.newPoints, parseInt(studentIndex, 10) +2, 2
+                );
+                window.location.reload(true);
+            }
+        }
+
+        const onReset = () => {
+            setShowUpdatePointsForm(false);
+        }
+
+        return (
+            <>
+            <br></br>
+            <br></br>
+            <Card
+                style={{
+                    backgroundColor: "#9DC08B",
+                    display: "inline-block",
+                    paddingLeft: "300px",
+                    paddingRight: "300px",
+                }}
+            >
+                <Form
+                    name="updateStudentForm"
+                    labelCol={{ span: 80 }}
+                    wrapperCol={{ span: 20 }}
+                    style={{
+                        maxWidth: 600,
+                        textAlign: "left",
+                        display: "inline-block",
+                        fontFamily: "'Oxygen', sans-serif",
+                    }}
+
+                    onFinish={onFinish}
+                    autoComplete="on"
+                >
+                    <h3 style={{ textAlign: "center" }}>Update Student Points</h3>
+                    <Form.Item
+                        wrapperCol={{ span: 12 }}
+                        label={ 
+                            <p style={{ fontFamily: "'Oxygen', sans-serif", fontSize: "15px" }}>
+                                &nbsp;&nbsp;Student's Name
+                            </p>
+                        }
+                    >
+                        <Dropdown menu={menuProps} >
+                            <Button style={{ fontFamily: "'Oxygen', sans-serif" }}>
+                                {studentName !== "" ? studentName : "Select"}
+                                <CaretDownOutlined />
+                            </Button>
+                        </Dropdown>
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{ span: 12 }}
+                        label={<p style={{ fontFamily: "'Oxygen', sans-serif", fontSize: "15px" }}>
+                            New Point Total
+                        </p>}
+                        name="newPoints"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please enter the new number of points."
+                            }
+                        ]}
+                    >
+                        <InputNumber style={{ fontFamily: "'Oxygen', sans-serif" }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        wrapperCol={{
+                            offset: 4,
+                            span: 20
+                        }}    
+                    >
+                        <Button type="button" htmlType="submit" className="submitButton"
+                        style={{ fontFamily: "'Oxygen', sans-serif" }}>
+                            Submit
+                        </Button>
+                        <Button type="button" htmlType="button" onClick={onReset} className="cancelButton"
+                        style={{ fontFamily: "'Oxygen', sans-serif" }}>
+                            Cancel
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+            </>
+        )
+    }
+
+
+    const StudentDisplayTable = () => {
+        const columns = [
+            {
+                title: "Last Name",
+                dataIndex: "lastName",
+                key: "lastName",
+            },
+            {
+                title: "First Name",
+                dataIndex: "firstName",
+                key: "firstName"
+            },
+            {
+                title: "NP",
+                dataIndex: "np",
+                key: "np",
+                width: "20%"
+            }
+        ];
+
+        const data = [];
+        for (let i = 0; i < sheetsData.length; i++) {
+            data.push({
+                key: i,
+                lastName: sheetsData[i][0],
+                firstName: sheetsData[i][1],
+                np: sheetsData[i][2],
+            })
+        }
+
+        return (
+            <div className="Table-div">
+                <Table className="studentTable" columns={columns} dataSource={data}
+                maxWidth="300" size="middle" pagination={false} scroll={{ y: 250 }} />
             </div>
         )
     }
 
+
     return(
         <div className="App">
-            <h1 style={{ fontSize: "35px" }}>Code Ninjas Livingston Points App</h1>
+            <h1 style={{ fontSize: "35px" }}>Code Ninjas Livingston</h1>
             {!isLoggedIn ? (
-                <button onClick={createGoogleAuthLink}>Log In</button>
+                <button className="loginButton" onClick={createGoogleAuthLink}>Log In</button>
             ) : (
                 <>
-                <button onClick={signOut}>Log Out</button>
+                <button className="loginButton" onClick={signOut}>Log Out</button>
+                <br></br>
                 <br></br>
 
                 {showAddForm ? (
-                    <AddUserForm />
+                    <AddStudentForm />
                 ) : (
-                    <button onClick={() => {setShowUpdatePointsForm(false); setShowAddForm(true);}}>
+                    <button className="addStudentButton"
+                    onClick={() => {setShowUpdatePointsForm(false); setShowAddForm(true);}}>
                         Add Student
                     </button>
                 )}
 
                 {showUpdatePointsForm ? (
-                    <UpdateUserForm />
+                    <UpdateStudentForm />
                 ) : (
-                    <button onClick={() => {setShowAddForm(false); setShowUpdatePointsForm(true);}}>
+                    <button className="updateStudentButton"
+                    onClick={() => {setShowAddForm(false); setShowUpdatePointsForm(true);}}>
                         Update Points
                     </button>
                 )}
+                <br></br>
+                <br></br>
 
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>NP</th>
-                        </tr>
-                        {sheetsData.map((item, i) => (
-                            <tr key={i}>
-                                <td>{item[0]}</td>
-                                <td>{item[1]}</td>
-                                <td>{item[2]}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {sheetsData.length === 0 ? (
+                    <>
+                    <br></br>
+                    <Empty 
+                        description={<span>No data found.<br></br>Try logging in again.</span>}
+                    />
+                    </>
+                ) : (
+                    <StudentDisplayTable />
+                )}
                 </>
             )}
         </div>

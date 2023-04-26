@@ -1,22 +1,86 @@
-.Header, .App {
+body {
   text-align: center;
-  /* background-color: aliceblue; */
-  /* margin: 20px; */
+  background-color: #DDFFBB;
+  font-family: 'Oxygen', sans-serif;
 }
 
-button {
-  margin-bottom: 20px;
+.addStudentButton, .updateStudentButton {
+  background-color: #609966;
+  font-size: 14px;
+  color: white;
+  border: none;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  font-family: 'Oxygen', sans-serif;
+}
+.addStudentButton:hover, .updateStudentButton:hover {
+  background-color: #9DC08B;
+  cursor: pointer;
 }
 
-table, th, td {
-  margin: 0 auto;
-  /* width: 50%; */
-  border: 1px solid;
-  border-collapse: collapse;  /* Only one border instead of two */
-  /* border-bottom: 1px solid #ddd; */
+.submitButton {
+  background-color: #40513B;
+  color: white;
+  border: none;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  font-family: 'Oxygen', sans-serif;
+}
+.submitButton:hover {
+  background-color: #607959;
 }
 
-th, td {
-  text-align: left;
-  padding: 7px;
+.cancelButton {
+  background-color: #859975;
+  color: white;
+  border: none;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  font-family: 'Oxygen', sans-serif;
 }
+.cancelButton:hover {
+  background-color: #66755a;
+  cursor: pointer;
+}
+
+.loginButton {
+  background-color: #40513B;
+  font-size: 14px;
+  color: white;
+  border: none;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  font-family: 'Oxygen', sans-serif;
+}
+.loginButton:hover {
+  background-color: #5f7957;
+  cursor: pointer;
+}
+
+.Table-div {
+  padding-left: 300px;
+  padding-right: 300px;
+}
+
+.ant-table table {
+  font-family: 'Oxygen', sans-serif;
+  color: #578a5c;
+}
+
+.ant-table thead {
+  color: #578a5c;
+}
+
+
